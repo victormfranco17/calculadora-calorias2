@@ -1,0 +1,177 @@
+<html>
+<head>
+<style>
+  .container {
+    width: 80%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+
+  .title {
+    text-align: center;
+    font-size: 36px;
+    color: #333;
+  }
+
+  .form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .form-group {
+    width: 48%;
+    margin-bottom: 10px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 18px;
+    color: #666;
+  }
+
+  .form-input {
+    display: block;
+    width: 100%;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+  }
+
+  .form-select {
+    display: block;
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+  }
+
+  .form-button {
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .result {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="title">Calculadora de consumo de calorias</h1>
+<form class="form" id="calorie-form">
+<div class="form-group">
+<label class="form-label" for="weight">Peso (kg)</label>
+<input class="form-input" type="number" id="weight" name="weight" min="0" required>
+</div>
+<div class="form-group">
+<label class="form-label" for="height">Altura (cm)</label>
+<input class="form-input" type="number" id="height" name="height" min="0" required>
+</div>
+<div class="form-group">
+<label class="form-label" for="age">Edad (años)</label>
+<input class="form-input" type="number" id="age" name="age" min="0" required>
+</div>
+<div class="form-group">
+<label class="form-label" for="gender">Género</label>
+<select class="form-select" id="gender" name="gender" required>
+<option value="">Selecciona una opción</option>
+<option value="male">Masculino</option>
+<option value="female">Femenino</option>
+</select>
+</div>
+<div class="form-group">
+<label class="form-label" for="activity">Nivel de actividad física</label>
+<select class="form-select" id="activity" name="activity" required>
+<option value="">Selecciona una opción</option>
+<option value="1.2">Sedentario (poco o ningún ejercicio)</option>
+<option value="1.375">Ligero (ejercicio ligero de 1 a 3 días a la semana)</option>
+<option value="1.55">Moderado (ejercicio moderado de 3 a 5 días a la semana)</option>
+<option value="1.725">Alto (ejercicio intenso de 6 a 7 días a la semana)</option>
+<option value="1.9">Muy alto (ejercicio muy intenso y trabajo físico)</option>
+</select>
+</div>
+<div class="form-group">
+<label class="form-label" for="goal">Objetivo</label>
+<select class="form-select" id="goal" name="goal" required>
+<option value="">Selecciona una opción</option>
+<option value="-500">Perder peso (reducir 500 calorias diarias)</option>
+<option value="-250">Perder peso lentamente (reducir 250 calorias diarias)</option>
+<option value="-100">Perder peso muy lentamente (reducir 100 calorias diarias)</option>
+<option value="0">Mantener el peso actual</option>
+<option value="100">Ganar peso muy lentamente (aumentar 100 calorias diarias)</option>
+<option value="250">Ganar peso lentamente (aumentar 250 calorias diarias)</option>
+<option value="500">Ganar peso (aumentar 500 calorias diarias)</option>
+</select>
+</div>
+<div class="form-group">
+<button class="form-button" type="submit" id="calculate">Calcular</button>
+</div>
+</form>
+<p class="result" id="result"></p>
+</div>
+<script>
+// Get the form element
+var form = document.getElementById("calorie-form");
+
+// Add an event listener to the form submit
+form.addEventListener("submit", function(event) {
+  // Prevent the default form submit action
+  event.preventDefault();
+
+  // Get the form input values
+  var weight = Number(document.getElementById("weight").value);
+  var height = Number(document.getElementById("height").value);
+  var age = Number(document.getElementById("age").value);
+  var gender = document.getElementById("gender").value;
+  var activity = Number(document.getElementById("activity").value);
+  var goal = Number(document.getElementById("goal").value);
+
+  // Validate the input values
+  if (weight <= 0 || height <= 0 || age <= 0 || gender == "" || activity == "" || goal == "") {
+    // Show an alert message if any input is invalid
+    alert("Por favor, ingresa valores válidos para todos los campos.");
+    return;
+  }
+
+  // Calculate the basal metabolic rate (BMR) using the Mifflin-St Jeor equation
+  var bmr = 10 * weight + 6.25 * height - 5 * age;
+  if (gender == "male") {
+    bmr += 5;
+  } else {
+    bmr -= 161;
+  }
+
+  // Calculate the total daily energy expenditure (TDEE) by multiplying the BMR by the activity factor
+  var tdee = bmr * activity;
+
+  // Calculate the daily calorie intake by adding or subtracting the goal factor to the TDEE
+  var calorie = tdee + goal;
+
+  // Round the calorie value to the nearest integer
+  calorie = Math.round(calorie);
+
+  // Get the result element
+  var result = document.getElementById("result");
+
+  // Display the result in the result element
+  result.textContent = "Necesitas consumir " + calorie + " calorias al día para alcanzar tu objetivo.";
+});
+</script>
+</body>
+</html>
